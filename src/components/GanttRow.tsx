@@ -1,5 +1,6 @@
 import { VacationPeriod } from "@/types/vacation";
 import { VacationBar } from "./VacationBar";
+import { format } from "date-fns";
 
 interface GanttRowProps {
   vacation: VacationPeriod;
@@ -27,7 +28,9 @@ export const GanttRow = ({
         <div className="font-semibold text-sm text-foreground truncate">
           {vacation.nome}
         </div>
-        <div className="text-xs text-muted-foreground">{vacation.codusu}</div>
+        <div className="text-xs text-muted-foreground">
+          {format(vacation.startDate, "dd/MM/yyyy")} → {format(vacation.endDate, "dd/MM/yyyy")}
+        </div>
       </div>
       <div className="flex relative" style={{ height: rowHeight }}>
         {days.map((_, index) => (
