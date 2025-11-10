@@ -18,21 +18,17 @@ export const GanttChart = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const dateRange = useMemo(() => {
-    if (!vacations || vacations.length === 0) {
-      const start = startOfMonth(currentMonth);
-      const end = endOfMonth(addMonths(currentMonth, 2));
-      return getDateRange(start, end);
-    }
-
-    const allDates = vacations.flatMap((v) => [v.startDate, v.endDate]);
-    const minDate = min(allDates);
-    const maxDate = max(allDates);
-
-    return getDateRange(startOfMonth(minDate), endOfMonth(maxDate));
-  }, [vacations, currentMonth]);
+    const start = startOfMonth(currentMonth);
+    const end = endOfMonth(addMonths(currentMonth, 2));
+    return getDateRange(start, end);
+  }, [currentMonth]);
 
   const handleNavigate = (direction: "prev" | "next") => {
     setCurrentMonth((prev) => navigateMonth(prev, direction));
+  };
+
+  const handleDateRangeChange = (startDate: Date, endDate: Date) => {
+    setCurrentMonth(startDate);
   };
 
   useEffect(() => {
@@ -76,6 +72,7 @@ export const GanttChart = () => {
         onZoomOut={zoomOut}
         canZoomIn={canZoomIn}
         canZoomOut={canZoomOut}
+        onDateRangeChange={handleDateRangeChange}
       />
 
       <div
