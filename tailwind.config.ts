@@ -47,6 +47,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        vacation: {
+          DEFAULT: "hsl(var(--vacation))",
+          foreground: "hsl(var(--vacation-foreground))",
+        },
+        conflict: {
+          DEFAULT: "hsl(var(--conflict))",
+          foreground: "hsl(var(--conflict-foreground))",
+        },
+        "grid-line": "hsl(var(--grid-line))",
+        "header-bg": "hsl(var(--header-bg))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

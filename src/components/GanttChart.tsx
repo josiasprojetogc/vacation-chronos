@@ -1,0 +1,109 @@
+import { useState, useMemo, useRef, useEffect } from "react";
+import { GanttHeader } from "./GanttHeader";
+import { GanttTimeline } from "./GanttTimeline";
+import { GanttRow } from "./GanttRow";
+import { useVacationData } from "@/hooks/useVacationData";
+import { useGanttZoom } from "@/hooks/useGanttZoom";
+import { getDateRange, navigateMonth } from "@/utils/dateUtils";
+import { Loader2 } from "lucide-react";
+import { addMonths, startOfMonth, endOfMonth, min, max } from "date-fns";
+
+const LEFT_COLUMN_WIDTH = 250;
+const ROW_HEIGHT = 48;
+
+export const GanttChart = () => {
+  const { data: vacations, isLoading, error } = useVacationData();
+  const { dayWidth, zoomIn, zoomOut, canZoomIn, canZoomOut } = useGanttZoom();
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const dateRange = useMemo(() => {
+    if (!vacations || vacations.length === 0) {
+      const start = startOfMonth(currentMonth);
+      const end = endOfMonth(addMonths(currentMonth, 2));
+      return getDateRange(start, end);
+    }
+
+    const allDates = vacations.flatMap((v) => [v.startDate, v.endDate]);
+    const minDate = min(allDates);
+    const maxDate = max(allDates);
+
+    return getDateRange(startOfMonth(minDate), endOfMonth(maxDate));
+  }, [vacations, currentMonth]);
+
+  const handleNavigate = (direction: "prev" | "next") => {
+    setCurrentMonth((prev) => navigateMonth(prev, direction));
+  };
+
+  useEffect(() => {
+    if (scrollContainerRef.current && dateRange.length > 0) {
+      const middlePosition = (dateRange.length * dayWidth) / 3;
+      scrollContainerRef.current.scrollLeft = middlePosition;
+    }
+  }, [dateRange.length, dayWidth]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Carregando dados de férias...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="text-center">
+          <p className="text-destructive font-semibold mb-2">Erro ao carregar dados</p>
+          <p className="text-muted-foreground text-sm">
+            Não foi possível conectar com a API
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-screen flex flex-col bg-background">
+      <GanttHeader
+        title="Visualizador de Férias (Gantt / Calendário)"
+        currentDate={currentMonth}
+        onNavigate={handleNavigate}
+        onZoomIn={zoomIn}
+        onZoomOut={zoomOut}
+        canZoomIn={canZoomIn}
+        canZoomOut={canZoomOut}
+      />
+
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-auto"
+        style={{ scrollbarGutter: "stable" }}
+      >
+        <div className="inline-block min-w-full">
+          <div className="relative" style={{ paddingTop: "2rem" }}>
+            <GanttTimeline
+              days={dateRange}
+              dayWidth={dayWidth}
+              leftColumnWidth={LEFT_COLUMN_WIDTH}
+            />
+            {vacations?.map((vacation) => (
+              <GanttRow
+                key={vacation.codusu}
+                vacation={vacation}
+                days={dateRange}
+                dayWidth={dayWidth}
+                leftColumnWidth={LEFT_COLUMN_WIDTH}
+                rangeStart={dateRange[0]}
+                rowHeight={ROW_HEIGHT}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
