@@ -21,7 +21,7 @@ export const GanttRow = ({
   return (
     <div className="flex border-b border-border hover:bg-muted/30 transition-colors">
       <div
-        className="flex-shrink-0 border-r border-border p-2 flex flex-col justify-center"
+        className="flex-shrink-0 border-r border-border p-2 flex flex-col justify-center sticky left-0 bg-background z-10"
         style={{ width: leftColumnWidth, height: rowHeight }}
       >
         <div className="font-semibold text-sm text-foreground truncate">
