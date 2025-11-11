@@ -81,7 +81,7 @@ export const GanttChart = () => {
         style={{ scrollbarGutter: "stable" }}
       >
         <div className="inline-block min-w-full">
-          <div className="relative" style={{ paddingTop: "2rem" }}>
+          <div className="relative">
             <GanttTimeline
               days={dateRange}
               dayWidth={dayWidth}

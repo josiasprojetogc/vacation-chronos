@@ -29,7 +29,7 @@ export const GanttRow = ({
         </div>
         <div className="text-xs text-muted-foreground">{vacation.codusu}</div>
       </div>
-      <div className="flex relative" style={{ height: rowHeight }}>
+      <div className="flex relative overflow-hidden" style={{ height: rowHeight }}>
         {days.map((_, index) => (
           <div
             key={index}
