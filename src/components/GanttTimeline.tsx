@@ -61,7 +61,7 @@ export const GanttTimeline = ({ days, dayWidth, leftColumnWidth }: GanttTimeline
             return (
               <div
                 key={`month-${index}`}
-                className="border-r border-grid-line flex items-center justify-center"
+                className={`flex items-center justify-center ${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line`}
                 style={{ width: dayWidth, minWidth: dayWidth, height: "32px" }}
               >
                 {showMonthDivider && (

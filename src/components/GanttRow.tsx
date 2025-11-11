@@ -1,5 +1,7 @@
 import { VacationPeriod } from "@/types/vacation";
 import { VacationBar } from "./VacationBar";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface GanttRowProps {
   vacation: VacationPeriod;
@@ -18,6 +20,8 @@ export const GanttRow = ({
   rangeStart,
   rowHeight,
 }: GanttRowProps) => {
+  let currentMonth = "";
+
   return (
     <div className="flex border-b border-border hover:bg-muted/30 transition-colors">
       <div
@@ -30,13 +34,22 @@ export const GanttRow = ({
         <div className="text-xs text-muted-foreground">{vacation.codusu}</div>
       </div>
       <div className="flex relative overflow-hidden" style={{ height: rowHeight }}>
-        {days.map((_, index) => (
-          <div
-            key={index}
-            className="border-r border-grid-line"
-            style={{ width: dayWidth, minWidth: dayWidth }}
-          />
-        ))}
+        {days.map((day, index) => {
+          const monthName = format(day, "MMMM", { locale: ptBR });
+          const showMonthDivider = monthName !== currentMonth;
+          
+          if (showMonthDivider) {
+            currentMonth = monthName;
+          }
+
+          return (
+            <div
+              key={index}
+              className={`${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line`}
+              style={{ width: dayWidth, minWidth: dayWidth }}
+            />
+          );
+        })}
         <VacationBar
           vacation={vacation}
           rangeStart={rangeStart}
