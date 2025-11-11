@@ -55,6 +55,10 @@ export default {
           DEFAULT: "hsl(var(--conflict))",
           foreground: "hsl(var(--conflict-foreground))",
         },
+        official: {
+          DEFAULT: "hsl(var(--official))",
+          foreground: "hsl(var(--official-foreground))",
+        },
         "grid-line": "hsl(var(--grid-line))",
         "header-bg": "hsl(var(--header-bg))",
         sidebar: {

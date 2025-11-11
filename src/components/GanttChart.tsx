@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 import { addMonths, startOfMonth, endOfMonth, min, max } from "date-fns";
 
 const LEFT_COLUMN_WIDTH = 250;
-const ROW_HEIGHT = 48;
+const ROW_HEIGHT = 64;
 
 export const GanttChart = () => {
   const { data: vacations, isLoading, error } = useVacationData();

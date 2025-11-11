@@ -34,10 +34,13 @@ export const GanttHeader = ({
         <h1 className="text-xl font-semibold text-foreground">{title}</h1>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="bg-vacation/20 border-vacation text-vacation-foreground">
-            Férias
+            Férias Solicitação
           </Badge>
           <Badge variant="outline" className="bg-conflict/20 border-conflict text-conflict-foreground">
-            Conflito
+            Conflito Solicitação
+          </Badge>
+          <Badge variant="outline" className="bg-official/20 border-official text-official-foreground">
+            Oficial
           </Badge>
         </div>
       </div>

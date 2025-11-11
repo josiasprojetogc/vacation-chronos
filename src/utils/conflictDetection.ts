@@ -7,9 +7,10 @@ export const detectConflicts = (vacations: VacationPeriod[]): VacationPeriod[] =
     vacations.forEach((other) => {
       if (vacation.codusu === other.codusu) return;
       
+      // Detectar conflitos baseado nas datas de solicitação (datainireq/datafimreq)
       const hasOverlap = 
-        (vacation.startDate <= other.endDate && vacation.endDate >= other.startDate) ||
-        (other.startDate <= vacation.endDate && other.endDate >= vacation.startDate);
+        (vacation.startDateReq <= other.endDateReq && vacation.endDateReq >= other.startDateReq) ||
+        (other.startDateReq <= vacation.endDateReq && other.endDateReq >= vacation.startDateReq);
       
       if (hasOverlap) {
         conflicts.push(other.codusu);

@@ -43,6 +43,9 @@ All colors MUST be HSL.
     
     --conflict: 0 80% 60%;
     --conflict-foreground: 210 20% 95%;
+    
+    --official: 142 76% 45%;
+    --official-foreground: 0 0% 100%;
 
     --grid-line: 215 20% 22%;
     --header-bg: 215 25% 14%;
@@ -91,6 +94,9 @@ All colors MUST be HSL.
     
     --conflict: 0 80% 60%;
     --conflict-foreground: 210 20% 95%;
+    
+    --official: 142 76% 45%;
+    --official-foreground: 0 0% 100%;
 
     --grid-line: 215 20% 22%;
     --header-bg: 215 25% 14%;

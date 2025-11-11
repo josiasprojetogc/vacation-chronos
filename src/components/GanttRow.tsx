@@ -42,6 +42,14 @@ export const GanttRow = ({
           rangeStart={rangeStart}
           dayWidth={dayWidth}
           rowHeight={rowHeight}
+          type="requested"
+        />
+        <VacationBar
+          vacation={vacation}
+          rangeStart={rangeStart}
+          dayWidth={dayWidth}
+          rowHeight={rowHeight}
+          type="official"
         />
       </div>
     </div>

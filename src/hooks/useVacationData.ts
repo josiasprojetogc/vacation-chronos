@@ -19,6 +19,8 @@ export const useVacationData = () => {
         ...item,
         startDate: parseBrazilianDate(item.dataini),
         endDate: parseBrazilianDate(item.datafim),
+        startDateReq: parseBrazilianDate(item.datainireq),
+        endDateReq: parseBrazilianDate(item.datafimreq),
         hasConflict: false,
         conflictWith: [],
       }));
