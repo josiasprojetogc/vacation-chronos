@@ -1,7 +1,8 @@
 import { VacationPeriod } from "@/types/vacation";
 import { VacationBar } from "./VacationBar";
-import { format } from "date-fns";
+import { format, isSameDay, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { ViewMode } from "@/types/viewMode";
 
 interface GanttRowProps {
   vacation: VacationPeriod;
@@ -10,6 +11,7 @@ interface GanttRowProps {
   leftColumnWidth: number;
   rangeStart: Date;
   rowHeight: number;
+  viewMode: ViewMode;
 }
 
 export const GanttRow = ({
@@ -19,8 +21,10 @@ export const GanttRow = ({
   leftColumnWidth,
   rangeStart,
   rowHeight,
+  viewMode,
 }: GanttRowProps) => {
   let currentMonth = "";
+  const today = startOfDay(new Date());
 
   return (
     <div className="flex border-b border-border hover:bg-muted/30 transition-colors">
@@ -37,6 +41,7 @@ export const GanttRow = ({
         {days.map((day, index) => {
           const monthName = format(day, "MMMM", { locale: ptBR });
           const showMonthDivider = monthName !== currentMonth;
+          const isTodayColumn = isSameDay(day, today);
           
           if (showMonthDivider) {
             currentMonth = monthName;
@@ -45,7 +50,7 @@ export const GanttRow = ({
           return (
             <div
               key={index}
-              className={`${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line`}
+              className={`${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line ${isTodayColumn ? 'bg-today-highlight/10' : ''}`}
               style={{ width: dayWidth, minWidth: dayWidth }}
             />
           );

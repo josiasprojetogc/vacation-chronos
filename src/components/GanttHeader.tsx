@@ -6,6 +6,7 @@ import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import { ViewMode } from "@/types/viewMode";
 
 interface GanttHeaderProps {
   title: string;
@@ -16,6 +17,8 @@ interface GanttHeaderProps {
   canZoomIn: boolean;
   canZoomOut: boolean;
   onDateRangeChange?: (startDate: Date, endDate: Date) => void;
+  viewMode: ViewMode;
+  onViewModeChange: (mode: ViewMode) => void;
 }
 
 export const GanttHeader = ({
@@ -27,6 +30,8 @@ export const GanttHeader = ({
   canZoomIn,
   canZoomOut,
   onDateRangeChange,
+  viewMode,
+  onViewModeChange,
 }: GanttHeaderProps) => {
   return (
     <div className="flex items-center justify-between p-4 bg-header-bg border-b border-border">
@@ -46,6 +51,37 @@ export const GanttHeader = ({
       </div>
 
       <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 border-r border-border pr-2">
+          <Button
+            variant={viewMode === 'day' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => onViewModeChange('day')}
+          >
+            Dia
+          </Button>
+          <Button
+            variant={viewMode === 'month' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => onViewModeChange('month')}
+          >
+            Mês
+          </Button>
+          <Button
+            variant={viewMode === 'quarter' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => onViewModeChange('quarter')}
+          >
+            Trimestre
+          </Button>
+          <Button
+            variant={viewMode === 'year' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => onViewModeChange('year')}
+          >
+            Ano
+          </Button>
+        </div>
+        
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" size="sm" className="gap-2">

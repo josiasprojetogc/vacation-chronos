@@ -5,9 +5,9 @@ import { detectConflicts } from "@/utils/conflictDetection";
 
 const API_URL = "https://api-app-gestao-patrimonial-dot-vmgc-e-commerce.rj.r.appspot.com/api/v1/vacation/";
 
-export const useVacationData = () => {
+export const useVacationData = (minDate?: Date) => {
   return useQuery({
-    queryKey: ["vacations"],
+    queryKey: ["vacations", minDate?.toISOString()],
     queryFn: async (): Promise<VacationPeriod[]> => {
       const response = await fetch(API_URL);
       if (!response.ok) {
@@ -15,7 +15,7 @@ export const useVacationData = () => {
       }
       const data: VacationData[] = await response.json();
       
-      const processedData = data.map((item) => ({
+      let processedData = data.map((item) => ({
         ...item,
         startDate: parseBrazilianDate(item.dataini),
         endDate: parseBrazilianDate(item.datafim),
@@ -24,6 +24,14 @@ export const useVacationData = () => {
         hasConflict: false,
         conflictWith: [],
       }));
+      
+      // Filtrar por data mínima se fornecida
+      if (minDate) {
+        processedData = processedData.filter(item => item.endDateReq >= minDate);
+      }
+      
+      // Ordenar por data de início (asc)
+      processedData.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
       
       return detectConflicts(processedData);
     },

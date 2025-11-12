@@ -49,6 +49,7 @@ All colors MUST be HSL.
 
     --grid-line: 215 20% 22%;
     --header-bg: 215 25% 14%;
+    --today-highlight: 210 100% 60%;
 
     --sidebar-background: 215 25% 15%;
     --sidebar-foreground: 210 20% 95%;
@@ -100,6 +101,7 @@ All colors MUST be HSL.
 
     --grid-line: 215 20% 22%;
     --header-bg: 215 25% 14%;
+    --today-highlight: 210 100% 60%;
 
     --sidebar-background: 215 25% 15%;
     --sidebar-foreground: 210 20% 95%;
