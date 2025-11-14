@@ -4,7 +4,7 @@ import { GanttTimeline } from "./GanttTimeline";
 import { GanttRow } from "./GanttRow";
 import { useVacationData } from "@/hooks/useVacationData";
 import { useGanttZoom } from "@/hooks/useGanttZoom";
-import { getDateRange, navigateMonth } from "@/utils/dateUtils";
+import { getDateRange, navigateMonth, getPeriods, Period } from "@/utils/dateUtils";
 import { Loader2 } from "lucide-react";
 import { addMonths, startOfMonth, endOfMonth, startOfYear, endOfYear, startOfQuarter, endOfQuarter } from "date-fns";
 import { ViewMode } from "@/types/viewMode";
@@ -16,10 +16,28 @@ export const GanttChart = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('day');
   const { data: vacations, isLoading, error } = useVacationData(startOfMonth(currentMonth));
-  const { dayWidth, zoomIn, zoomOut, canZoomIn, canZoomOut } = useGanttZoom();
+  const { dayWidth, zoomIn, zoomOut, canZoomIn, canZoomOut, setZoomLevel } = useGanttZoom();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const dateRange = useMemo(() => {
+  // Ajustar zoom automaticamente baseado no viewMode
+  useEffect(() => {
+    switch (viewMode) {
+      case 'year':
+        setZoomLevel(1); // Mais zoom out
+        break;
+      case 'quarter':
+        setZoomLevel(2);
+        break;
+      case 'month':
+        setZoomLevel(3);
+        break;
+      case 'day':
+        setZoomLevel(4);
+        break;
+    }
+  }, [viewMode, setZoomLevel]);
+
+  const { dateRange, periods, periodWidth } = useMemo(() => {
     let start: Date;
     let end: Date;
     
@@ -43,8 +61,15 @@ export const GanttChart = () => {
         break;
     }
     
-    return getDateRange(start, end);
-  }, [currentMonth, viewMode]);
+    const range = getDateRange(start, end);
+    const periodsData = getPeriods(start, end, viewMode);
+    
+    return {
+      dateRange: range,
+      periods: periodsData,
+      periodWidth: dayWidth
+    };
+  }, [currentMonth, viewMode, dayWidth]);
 
   const handleNavigate = (direction: "prev" | "next") => {
     setCurrentMonth((prev) => navigateMonth(prev, direction));
@@ -55,11 +80,11 @@ export const GanttChart = () => {
   };
 
   useEffect(() => {
-    if (scrollContainerRef.current && dateRange.length > 0) {
-      const middlePosition = (dateRange.length * dayWidth) / 3;
+    if (scrollContainerRef.current && periods.length > 0) {
+      const middlePosition = (periods.length * periodWidth) / 3;
       scrollContainerRef.current.scrollLeft = middlePosition;
     }
-  }, [dateRange.length, dayWidth]);
+  }, [periods.length, periodWidth]);
 
   if (isLoading) {
     return (
@@ -108,8 +133,8 @@ export const GanttChart = () => {
         <div className="inline-block min-w-full">
           <div className="relative">
             <GanttTimeline
-              days={dateRange}
-              dayWidth={dayWidth}
+              periods={periods}
+              periodWidth={periodWidth}
               leftColumnWidth={LEFT_COLUMN_WIDTH}
               viewMode={viewMode}
             />
@@ -117,10 +142,9 @@ export const GanttChart = () => {
               <GanttRow
                 key={vacation.codusu}
                 vacation={vacation}
-                days={dateRange}
-                dayWidth={dayWidth}
+                periods={periods}
+                periodWidth={periodWidth}
                 leftColumnWidth={LEFT_COLUMN_WIDTH}
-                rangeStart={dateRange[0]}
                 rowHeight={ROW_HEIGHT}
                 viewMode={viewMode}
               />

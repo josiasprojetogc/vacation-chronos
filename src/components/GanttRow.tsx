@@ -3,23 +3,22 @@ import { VacationBar } from "./VacationBar";
 import { format, isSameDay, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ViewMode } from "@/types/viewMode";
+import { Period } from "@/utils/dateUtils";
 
 interface GanttRowProps {
   vacation: VacationPeriod;
-  days: Date[];
-  dayWidth: number;
+  periods: Period[];
+  periodWidth: number;
   leftColumnWidth: number;
-  rangeStart: Date;
   rowHeight: number;
   viewMode: ViewMode;
 }
 
 export const GanttRow = ({
   vacation,
-  days,
-  dayWidth,
+  periods,
+  periodWidth,
   leftColumnWidth,
-  rangeStart,
   rowHeight,
   viewMode,
 }: GanttRowProps) => {
@@ -38,10 +37,10 @@ export const GanttRow = ({
         <div className="text-xs text-muted-foreground">{vacation.codusu}</div>
       </div>
       <div className="flex relative overflow-hidden" style={{ height: rowHeight }}>
-        {days.map((day, index) => {
-          const monthName = format(day, "MMMM", { locale: ptBR });
-          const showMonthDivider = monthName !== currentMonth;
-          const isTodayColumn = isSameDay(day, today);
+        {periods.map((period, index) => {
+          const monthName = format(period.date, "MMMM", { locale: ptBR });
+          const showMonthDivider = monthName !== currentMonth && viewMode === 'day';
+          const isTodayColumn = isSameDay(period.date, today);
           
           if (showMonthDivider) {
             currentMonth = monthName;
@@ -51,23 +50,25 @@ export const GanttRow = ({
             <div
               key={index}
               className={`${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line ${isTodayColumn ? 'bg-today-highlight/10' : ''}`}
-              style={{ width: dayWidth, minWidth: dayWidth }}
+              style={{ width: periodWidth, minWidth: periodWidth }}
             />
           );
         })}
         <VacationBar
           vacation={vacation}
-          rangeStart={rangeStart}
-          dayWidth={dayWidth}
+          periods={periods}
+          periodWidth={periodWidth}
           rowHeight={rowHeight}
           type="requested"
+          viewMode={viewMode}
         />
         <VacationBar
           vacation={vacation}
-          rangeStart={rangeStart}
-          dayWidth={dayWidth}
+          periods={periods}
+          periodWidth={periodWidth}
           rowHeight={rowHeight}
           type="official"
+          viewMode={viewMode}
         />
       </div>
     </div>
