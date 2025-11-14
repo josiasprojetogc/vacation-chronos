@@ -1,33 +1,35 @@
 import { VacationPeriod, VacationType } from "@/types/vacation";
-import { calculateDayPosition } from "@/utils/dateUtils";
-import { differenceInDays, format } from "date-fns";
+import { calculatePeriodPosition, calculatePeriodWidth, Period } from "@/utils/dateUtils";
+import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { ViewMode } from "@/types/viewMode";
 
 interface VacationBarProps {
   vacation: VacationPeriod;
-  rangeStart: Date;
-  dayWidth: number;
+  periods: Period[];
+  periodWidth: number;
   rowHeight: number;
   type: VacationType;
+  viewMode: ViewMode;
 }
 
 export const VacationBar = ({
   vacation,
-  rangeStart,
-  dayWidth,
+  periods,
+  periodWidth,
   rowHeight,
   type,
+  viewMode,
 }: VacationBarProps) => {
   const isOfficial = type === 'official';
   const startDate = isOfficial ? vacation.startDate : vacation.startDateReq;
   const endDate = isOfficial ? vacation.endDate : vacation.endDateReq;
   
-  const startPos = calculateDayPosition(startDate, rangeStart, dayWidth);
-  const duration = differenceInDays(endDate, startDate) + 1;
-  const width = duration * dayWidth;
+  const startPos = calculatePeriodPosition(startDate, periods, periodWidth, viewMode);
+  const width = calculatePeriodWidth(startDate, endDate, periods, periodWidth, viewMode);
   
-  const barHeight = (rowHeight - 12) / 2; // Dividir altura em duas partes
-  const topPosition = isOfficial ? rowHeight / 2 + 2 : 4; // Oficial embaixo, solicitação em cima
+  const barHeight = (rowHeight - 12) / 2;
+  const topPosition = isOfficial ? rowHeight / 2 + 2 : 4;
 
   return (
     <div

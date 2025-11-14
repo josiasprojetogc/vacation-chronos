@@ -11,7 +11,7 @@ const ZOOM_CONFIGS = {
 };
 
 export const useGanttZoom = () => {
-  const [zoomLevel, setZoomLevel] = useState<ZoomLevel>(3);
+  const [zoomLevel, setZoomLevel] = useState<ZoomLevel>(4);
 
   const zoomIn = () => {
     if (zoomLevel < 5) {
@@ -36,5 +36,6 @@ export const useGanttZoom = () => {
     zoomOut,
     canZoomIn: zoomLevel < 5,
     canZoomOut: zoomLevel > 1,
+    setZoomLevel,
   };
 };
