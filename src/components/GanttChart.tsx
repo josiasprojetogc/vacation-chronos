@@ -3,7 +3,7 @@ import { GanttHeader } from "./GanttHeader";
 import { GanttTimeline } from "./GanttTimeline";
 import { GanttRow } from "./GanttRow";
 import { useVacationData } from "@/hooks/useVacationData";
-import { useGanttZoom } from "@/hooks/useGanttZoom";
+import { useDynamicPeriodWidth } from "@/hooks/useDynamicPeriodWidth";
 import { getDateRange, navigateMonth, getPeriods, Period } from "@/utils/dateUtils";
 import { Loader2 } from "lucide-react";
 import { addMonths, startOfMonth, endOfMonth, startOfYear, endOfYear, startOfQuarter, endOfQuarter } from "date-fns";
@@ -16,28 +16,9 @@ export const GanttChart = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('day');
   const { data: vacations, isLoading, error } = useVacationData(startOfMonth(currentMonth));
-  const { dayWidth, zoomIn, zoomOut, canZoomIn, canZoomOut, setZoomLevel } = useGanttZoom();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Ajustar zoom automaticamente baseado no viewMode
-  useEffect(() => {
-    switch (viewMode) {
-      case 'year':
-        setZoomLevel(1); // Mais zoom out
-        break;
-      case 'quarter':
-        setZoomLevel(2);
-        break;
-      case 'month':
-        setZoomLevel(3);
-        break;
-      case 'day':
-        setZoomLevel(4);
-        break;
-    }
-  }, [viewMode, setZoomLevel]);
-
-  const { dateRange, periods, periodWidth } = useMemo(() => {
+  const { dateRange, periods } = useMemo(() => {
     let start: Date;
     let end: Date;
     
@@ -67,9 +48,14 @@ export const GanttChart = () => {
     return {
       dateRange: range,
       periods: periodsData,
-      periodWidth: dayWidth
     };
-  }, [currentMonth, viewMode, dayWidth]);
+  }, [currentMonth, viewMode]);
+
+  const periodWidth = useDynamicPeriodWidth(scrollContainerRef, {
+    periodsCount: periods.length,
+    leftColumnWidth: LEFT_COLUMN_WIDTH,
+    viewMode,
+  });
 
   const handleNavigate = (direction: "prev" | "next") => {
     setCurrentMonth((prev) => navigateMonth(prev, direction));
@@ -116,10 +102,6 @@ export const GanttChart = () => {
         title="Visualizador de Férias (Gantt / Calendário)"
         currentDate={currentMonth}
         onNavigate={handleNavigate}
-        onZoomIn={zoomIn}
-        onZoomOut={zoomOut}
-        canZoomIn={canZoomIn}
-        canZoomOut={canZoomOut}
         onDateRangeChange={handleDateRangeChange}
         viewMode={viewMode}
         onViewModeChange={setViewMode}

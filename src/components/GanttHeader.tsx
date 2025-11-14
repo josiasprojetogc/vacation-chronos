@@ -1,4 +1,4 @@
-import { Calendar, ZoomIn, ZoomOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -12,10 +12,6 @@ interface GanttHeaderProps {
   title: string;
   currentDate: Date;
   onNavigate: (direction: "prev" | "next") => void;
-  onZoomIn: () => void;
-  onZoomOut: () => void;
-  canZoomIn: boolean;
-  canZoomOut: boolean;
   onDateRangeChange?: (startDate: Date, endDate: Date) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
@@ -25,10 +21,6 @@ export const GanttHeader = ({
   title,
   currentDate,
   onNavigate,
-  onZoomIn,
-  onZoomOut,
-  canZoomIn,
-  canZoomOut,
   onDateRangeChange,
   viewMode,
   onViewModeChange,
@@ -99,27 +91,6 @@ export const GanttHeader = ({
             />
           </PopoverContent>
         </Popover>
-
-        <div className="flex items-center gap-1 border-l border-border pl-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={onZoomOut}
-            disabled={!canZoomOut}
-            className="h-8 w-8"
-          >
-            <ZoomOut className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={onZoomIn}
-            disabled={!canZoomIn}
-            className="h-8 w-8"
-          >
-            <ZoomIn className="h-4 w-4" />
-          </Button>
-        </div>
 
         <div className="flex items-center gap-1 border-l border-border pl-2">
           <Button
