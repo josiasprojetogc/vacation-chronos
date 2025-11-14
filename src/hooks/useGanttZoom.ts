@@ -3,11 +3,11 @@ import { useState } from "react";
 export type ZoomLevel = 1 | 2 | 3 | 4 | 5;
 
 const ZOOM_CONFIGS = {
-  1: { dayWidth: 20, name: "Ano" },
-  2: { dayWidth: 40, name: "Semestre" },
-  3: { dayWidth: 60, name: "Trimestre" },
-  4: { dayWidth: 100, name: "Mês" },
-  5: { dayWidth: 150, name: "Semana" },
+  1: { dayWidth: 120, name: "Ano" },
+  2: { dayWidth: 180, name: "Trimestre" },
+  3: { dayWidth: 120, name: "Mês" },
+  4: { dayWidth: 100, name: "Dia" },
+  5: { dayWidth: 150, name: "Dia (Zoom)" },
 };
 
 export const useGanttZoom = () => {
