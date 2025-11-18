@@ -3,7 +3,6 @@ import { GanttHeader } from "./GanttHeader";
 import { GanttTimeline } from "./GanttTimeline";
 import { GanttRow } from "./GanttRow";
 import { useVacationData } from "@/hooks/useVacationData";
-import { useDynamicPeriodWidth } from "@/hooks/useDynamicPeriodWidth";
 import { getDateRange, navigateMonth, getPeriods, Period } from "@/utils/dateUtils";
 import { Loader2 } from "lucide-react";
 import { addMonths, startOfMonth, endOfMonth, startOfYear, endOfYear, startOfQuarter, endOfQuarter } from "date-fns";
@@ -51,11 +50,19 @@ export const GanttChart = () => {
     };
   }, [currentMonth, viewMode]);
 
-  const periodWidth = useDynamicPeriodWidth(scrollContainerRef, {
-    periodsCount: periods.length,
-    leftColumnWidth: LEFT_COLUMN_WIDTH,
-    viewMode,
-  });
+  const periodWidth = useMemo(() => {
+    switch (viewMode) {
+      case 'year':
+        return 150;
+      case 'quarter':
+        return 200;
+      case 'month':
+        return 120;
+      case 'day':
+      default:
+        return 50;
+    }
+  }, [viewMode]);
 
   const handleNavigate = (direction: "prev" | "next") => {
     setCurrentMonth((prev) => navigateMonth(prev, direction));
