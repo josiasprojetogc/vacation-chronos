@@ -3,7 +3,7 @@ import { VacationData, VacationPeriod } from "@/types/vacation";
 import { parseBrazilianDate } from "@/utils/dateUtils";
 import { detectConflicts } from "@/utils/conflictDetection";
 
-const API_URL = "https://api-app-gestao-patrimonial-dot-vmgc-e-commerce.rj.r.appspot.com/api/v1/vacation/";
+const API_URL = "https://api-ferias-ti-dot-vmgc-e-commerce.rj.r.appspot.com/api/v1/vacation/";
 
 export const useVacationData = (minDate?: Date) => {
   return useQuery({
