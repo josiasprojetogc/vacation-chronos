@@ -72,12 +72,6 @@ export const GanttChart = () => {
     setCurrentMonth(startDate);
   };
 
-  useEffect(() => {
-    if (scrollContainerRef.current && periods.length > 0) {
-      const middlePosition = (periods.length * periodWidth) / 3;
-      scrollContainerRef.current.scrollLeft = middlePosition;
-    }
-  }, [periods.length, periodWidth]);
 
   if (isLoading) {
     return (
