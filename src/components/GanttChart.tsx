@@ -24,20 +24,20 @@ export const GanttChart = () => {
     switch (viewMode) {
       case 'year':
         start = startOfYear(currentMonth);
-        end = endOfYear(addMonths(currentMonth, 24)); // 3 anos
+        end = endOfYear(addMonths(currentMonth, 60)); // 6 anos
         break;
       case 'quarter':
         start = startOfQuarter(currentMonth);
-        end = endOfQuarter(addMonths(currentMonth, 9)); // 4 trimestres
+        end = endOfQuarter(addMonths(currentMonth, 15)); // 6 trimestres
         break;
       case 'month':
         start = startOfMonth(currentMonth);
-        end = endOfMonth(addMonths(currentMonth, 11)); // 12 meses
+        end = endOfMonth(addMonths(currentMonth, 14)); // 15 meses
         break;
       case 'day':
       default:
         start = startOfMonth(currentMonth);
-        end = endOfMonth(addMonths(currentMonth, 2)); // 3 meses
+        end = endOfMonth(addMonths(currentMonth, 5)); // 6 meses
         break;
     }
     
