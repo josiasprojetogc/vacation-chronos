@@ -21,11 +21,11 @@ export const GanttTimeline = ({ periods, periodWidth, leftColumnWidth, viewMode 
   };
 
   return (
-    <div className="sticky top-0 z-10 bg-header-bg border-b border-border">
+    <div className="sticky top-0 z-30 bg-header-bg border-b border-border">
       {/* Ano - sempre mostra */}
       <div className="flex">
         <div
-          className="flex-shrink-0 border-r border-b border-border flex items-center justify-center sticky left-0 bg-header-bg z-20"
+          className="flex-shrink-0 border-r border-b border-border flex items-center justify-center sticky left-0 bg-header-bg z-40"
           style={{ width: leftColumnWidth, height: "32px" }}
         />
         <div className="flex">
@@ -60,7 +60,7 @@ export const GanttTimeline = ({ periods, periodWidth, leftColumnWidth, viewMode 
       {viewMode === 'quarter' && (
         <div className="flex">
           <div
-            className="flex-shrink-0 border-r border-b border-border flex items-center justify-center sticky left-0 bg-header-bg z-20"
+            className="flex-shrink-0 border-r border-b border-border flex items-center justify-center sticky left-0 bg-header-bg z-40"
             style={{ width: leftColumnWidth, height: "32px" }}
           />
           <div className="flex">
@@ -87,7 +87,7 @@ export const GanttTimeline = ({ periods, periodWidth, leftColumnWidth, viewMode 
       {viewMode === 'month' && (
         <div className="flex">
           <div
-            className="flex-shrink-0 border-r border-b border-border flex items-center justify-center sticky left-0 bg-header-bg z-20"
+            className="flex-shrink-0 border-r border-b border-border flex items-center justify-center sticky left-0 bg-header-bg z-40"
             style={{ width: leftColumnWidth, height: "32px" }}
           />
           <div className="flex">
@@ -146,7 +146,7 @@ export const GanttTimeline = ({ periods, periodWidth, leftColumnWidth, viewMode 
           {/* Linha de dias */}
           <div className="flex">
             <div
-              className="flex-shrink-0 border-r border-border p-2 flex items-center justify-center font-semibold text-muted-foreground text-sm sticky left-0 bg-header-bg z-20"
+              className="flex-shrink-0 border-r border-border p-2 flex items-center justify-center font-semibold text-muted-foreground text-sm sticky left-0 bg-header-bg z-40"
               style={{ width: leftColumnWidth }}
             >
               Colaborador
@@ -177,7 +177,7 @@ export const GanttTimeline = ({ periods, periodWidth, leftColumnWidth, viewMode 
       {viewMode !== 'day' && (
         <div className="flex">
           <div
-            className="flex-shrink-0 border-r border-border p-2 flex items-center justify-center font-semibold text-muted-foreground text-sm sticky left-0 bg-header-bg z-20"
+            className="flex-shrink-0 border-r border-border p-2 flex items-center justify-center font-semibold text-muted-foreground text-sm sticky left-0 bg-header-bg z-40"
             style={{ width: leftColumnWidth, height: "32px" }}
           >
             Colaborador
