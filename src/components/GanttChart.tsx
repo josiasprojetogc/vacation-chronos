@@ -100,7 +100,7 @@ export const GanttChart = () => {
   return (
     <div className="h-screen flex flex-col bg-background">
       <GanttHeader
-        title="Férias - Setor T.I."
+        title="Férias - Setor T.I"
         currentDate={currentMonth}
         onNavigate={handleNavigate}
         onDateRangeChange={handleDateRangeChange}
