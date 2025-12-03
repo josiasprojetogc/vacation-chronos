@@ -2,10 +2,9 @@ import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { MonthYearPicker } from "./MonthYearPicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { cn } from "@/lib/utils";
 import { ViewMode } from "@/types/viewMode";
 
 interface GanttHeaderProps {
@@ -81,13 +80,10 @@ export const GanttHeader = ({
               {format(currentDate, "MMMM 'de' yyyy", { locale: ptBR })}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end">
-            <CalendarComponent
-              mode="single"
+          <PopoverContent className="w-auto p-0 pointer-events-auto" align="end">
+            <MonthYearPicker
               selected={currentDate}
-              onSelect={(date) => date && onDateRangeChange?.(date, date)}
-              initialFocus
-              className={cn("p-3 pointer-events-auto")}
+              onSelect={(date) => onDateRangeChange?.(date, date)}
             />
           </PopoverContent>
         </Popover>

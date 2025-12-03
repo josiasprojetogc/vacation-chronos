@@ -25,9 +25,9 @@ export const useVacationData = (minDate?: Date) => {
         conflictWith: [],
       }));
       
-      // Filtrar por data mínima se fornecida
+      // Filtrar férias que se sobrepõem ao período visível (termina após ou durante o mês selecionado)
       if (minDate) {
-        processedData = processedData.filter(item => item.endDateReq >= minDate);
+        processedData = processedData.filter(item => item.endDate >= minDate || item.endDateReq >= minDate);
       }
       
       // Ordenar por data de início (asc)
