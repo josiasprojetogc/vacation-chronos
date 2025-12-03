@@ -75,6 +75,20 @@ export const calculatePeriodPosition = (
   periodWidth: number,
   viewMode: ViewMode
 ): number => {
+  if (periods.length === 0) return 0;
+  
+  const firstPeriod = periods[0];
+  const lastPeriod = periods[periods.length - 1];
+  
+  // Se a data é anterior ao primeiro período, retornar posição negativa ou 0
+  const firstPeriodStart = getPeriodStart(firstPeriod.date, viewMode);
+  if (date < firstPeriodStart) {
+    // Calcular posição negativa proporcional
+    const daysBeforeStart = differenceInDays(firstPeriodStart, date);
+    const avgDaysPerPeriod = getAvgDaysPerPeriod(viewMode);
+    return -(daysBeforeStart / avgDaysPerPeriod) * periodWidth;
+  }
+  
   let position = 0;
   
   for (let i = 0; i < periods.length; i++) {
@@ -114,6 +128,24 @@ export const calculatePeriodPosition = (
   }
   
   return position;
+};
+
+const getPeriodStart = (date: Date, viewMode: ViewMode): Date => {
+  switch (viewMode) {
+    case 'year': return startOfYear(date);
+    case 'quarter': return startOfQuarter(date);
+    case 'month': return startOfMonth(date);
+    default: return date;
+  }
+};
+
+const getAvgDaysPerPeriod = (viewMode: ViewMode): number => {
+  switch (viewMode) {
+    case 'year': return 365;
+    case 'quarter': return 91;
+    case 'month': return 30;
+    default: return 1;
+  }
 };
 
 export const calculatePeriodWidth = (

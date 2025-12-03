@@ -121,9 +121,9 @@ export const GanttChart = () => {
               leftColumnWidth={LEFT_COLUMN_WIDTH}
               viewMode={viewMode}
             />
-            {vacations?.map((vacation) => (
+            {vacations?.map((vacation, index) => (
               <GanttRow
-                key={vacation.codusu}
+                key={`${vacation.codusu}-${index}`}
                 vacation={vacation}
                 periods={periods}
                 periodWidth={periodWidth}
