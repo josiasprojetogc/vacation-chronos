@@ -25,8 +25,16 @@ export const VacationBar = ({
   const startDate = isOfficial ? vacation.startDate : vacation.startDateReq;
   const endDate = isOfficial ? vacation.endDate : vacation.endDateReq;
   
-  const startPos = calculatePeriodPosition(startDate, periods, periodWidth, viewMode);
-  const width = calculatePeriodWidth(startDate, endDate, periods, periodWidth, viewMode);
+  const rawStartPos = calculatePeriodPosition(startDate, periods, periodWidth, viewMode);
+  const rawWidth = calculatePeriodWidth(startDate, endDate, periods, periodWidth, viewMode);
+  
+  // Ajustar para barras que começam antes do período visível
+  const startPos = Math.max(0, rawStartPos);
+  const widthAdjustment = rawStartPos < 0 ? Math.abs(rawStartPos) : 0;
+  const width = rawWidth - widthAdjustment;
+  
+  // Não renderizar se a largura for <= 0 (barra totalmente fora do período)
+  if (width <= 0) return null;
   
   const barHeight = (rowHeight - 12) / 2;
   const topPosition = isOfficial ? rowHeight / 2 + 2 : 4;
