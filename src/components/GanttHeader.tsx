@@ -1,4 +1,4 @@
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -14,6 +14,8 @@ interface GanttHeaderProps {
   onDateRangeChange?: (startDate: Date, endDate: Date) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  zoomLevel: number;
+  onZoomChange: (zoom: number) => void;
 }
 
 export const GanttHeader = ({
@@ -23,7 +25,17 @@ export const GanttHeader = ({
   onDateRangeChange,
   viewMode,
   onViewModeChange,
+  zoomLevel,
+  onZoomChange,
 }: GanttHeaderProps) => {
+  const handleZoomIn = () => {
+    onZoomChange(Math.min(zoomLevel + 0.25, 2));
+  };
+
+  const handleZoomOut = () => {
+    onZoomChange(Math.max(zoomLevel - 0.25, 0.5));
+  };
+
   return (
     <div className="flex items-center justify-between p-4 bg-header-bg border-b border-border">
       <div className="flex items-center gap-4">
@@ -42,6 +54,32 @@ export const GanttHeader = ({
       </div>
 
       <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 border-r border-border pr-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleZoomOut}
+            className="h-8 w-8"
+            disabled={zoomLevel <= 0.5}
+            title="Zoom out"
+          >
+            <ZoomOut className="h-4 w-4" />
+          </Button>
+          <span className="text-xs text-muted-foreground w-12 text-center">
+            {Math.round(zoomLevel * 100)}%
+          </span>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleZoomIn}
+            className="h-8 w-8"
+            disabled={zoomLevel >= 2}
+            title="Zoom in"
+          >
+            <ZoomIn className="h-4 w-4" />
+          </Button>
+        </div>
+
         <div className="flex items-center gap-1 border-r border-border pr-2">
           <Button
             variant={viewMode === 'day' ? 'default' : 'outline'}
