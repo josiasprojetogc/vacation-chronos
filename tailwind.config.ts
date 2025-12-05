@@ -62,6 +62,7 @@ export default {
         "grid-line": "hsl(var(--grid-line))",
         "header-bg": "hsl(var(--header-bg))",
         "today-highlight": "hsl(var(--today-highlight))",
+        "weekend": "hsl(var(--weekend))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

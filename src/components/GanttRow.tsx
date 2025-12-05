@@ -1,6 +1,6 @@
 import { VacationPeriod } from "@/types/vacation";
 import { VacationBar } from "./VacationBar";
-import { format, isSameDay, startOfDay } from "date-fns";
+import { format, isSameDay, startOfDay, isWeekend } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ViewMode } from "@/types/viewMode";
 import { Period } from "@/utils/dateUtils";
@@ -41,6 +41,7 @@ export const GanttRow = ({
           const monthName = format(period.date, "MMMM", { locale: ptBR });
           const showMonthDivider = monthName !== currentMonth && viewMode === 'day';
           const isTodayColumn = isSameDay(period.date, today);
+          const isWeekendDay = viewMode === 'day' && isWeekend(period.date);
           
           if (showMonthDivider) {
             currentMonth = monthName;
@@ -49,7 +50,7 @@ export const GanttRow = ({
           return (
             <div
               key={index}
-              className={`${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line ${isTodayColumn ? 'bg-today-highlight/10' : ''}`}
+              className={`${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line ${isTodayColumn ? 'bg-today-highlight/10' : isWeekendDay ? 'bg-weekend' : ''}`}
               style={{ width: periodWidth, minWidth: periodWidth }}
             />
           );
