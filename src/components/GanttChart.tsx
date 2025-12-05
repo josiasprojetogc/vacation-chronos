@@ -14,6 +14,7 @@ const ROW_HEIGHT = 64;
 export const GanttChart = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('day');
+  const [zoomLevel, setZoomLevel] = useState(1);
   const { data: vacations, isLoading, error } = useVacationData(startOfMonth(currentMonth));
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -51,18 +52,21 @@ export const GanttChart = () => {
   }, [currentMonth, viewMode]);
 
   const periodWidth = useMemo(() => {
-    switch (viewMode) {
-      case 'year':
-        return 150;
-      case 'quarter':
-        return 200;
-      case 'month':
-        return 120;
-      case 'day':
-      default:
-        return 50;
-    }
-  }, [viewMode]);
+    const baseWidth = (() => {
+      switch (viewMode) {
+        case 'year':
+          return 150;
+        case 'quarter':
+          return 200;
+        case 'month':
+          return 120;
+        case 'day':
+        default:
+          return 50;
+      }
+    })();
+    return Math.round(baseWidth * zoomLevel);
+  }, [viewMode, zoomLevel]);
 
   const handleNavigate = (direction: "prev" | "next") => {
     setCurrentMonth((prev) => navigateMonth(prev, direction));
@@ -106,6 +110,8 @@ export const GanttChart = () => {
         onDateRangeChange={handleDateRangeChange}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
+        zoomLevel={zoomLevel}
+        onZoomChange={setZoomLevel}
       />
 
       <div
