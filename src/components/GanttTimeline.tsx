@@ -2,6 +2,8 @@ import { format, isSameDay, startOfDay, isWeekend, getDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ViewMode } from "@/types/viewMode";
 import { Period } from "@/utils/dateUtils";
+import { getHolidayName } from "@/utils/holidays";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface GanttTimelineProps {
   periods: Period[];
@@ -154,26 +156,52 @@ export const GanttTimeline = ({ periods, periodWidth, leftColumnWidth, viewMode 
               Colaborador
             </div>
             <div className="flex">
-              {periods.map((period, index) => {
-                const dayNumber = format(period.date, "d");
-                const dayOfWeek = getDay(period.date);
-                const weekday = weekdayAbbr[dayOfWeek];
-                const isTodayColumn = isSameDay(period.date, today);
-                const isWeekendDay = isWeekend(period.date);
+              <TooltipProvider delayDuration={200}>
+                {periods.map((period, index) => {
+                  const dayNumber = format(period.date, "d");
+                  const dayOfWeek = getDay(period.date);
+                  const weekday = weekdayAbbr[dayOfWeek];
+                  const isTodayColumn = isSameDay(period.date, today);
+                  const isWeekendDay = isWeekend(period.date);
+                  const holidayName = getHolidayName(period.date);
+                  const isHolidayDay = holidayName !== null;
 
-                return (
-                  <div
-                    key={`day-${index}`}
-                    className={`border-r border-grid-line ${isTodayColumn ? 'bg-today-highlight/10' : isWeekendDay ? 'bg-weekend' : ''}`}
-                    style={{ width: periodWidth, minWidth: periodWidth }}
-                  >
-                    <div className={`text-xs text-center py-1 ${isWeekendDay ? 'text-muted-foreground/70' : 'text-muted-foreground'}`}>
-                      <div>{dayNumber}</div>
-                      <div className="text-[10px]">{weekday}</div>
+                  const bgClass = isTodayColumn 
+                    ? 'bg-today-highlight/10' 
+                    : isHolidayDay 
+                      ? 'bg-holiday' 
+                      : isWeekendDay 
+                        ? 'bg-weekend' 
+                        : '';
+
+                  const dayContent = (
+                    <div
+                      className={`border-r border-grid-line ${bgClass}`}
+                      style={{ width: periodWidth, minWidth: periodWidth }}
+                    >
+                      <div className={`text-xs text-center py-1 ${isWeekendDay || isHolidayDay ? 'text-muted-foreground/70' : 'text-muted-foreground'}`}>
+                        <div>{dayNumber}</div>
+                        <div className="text-[10px]">{weekday}</div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+
+                  if (isHolidayDay) {
+                    return (
+                      <Tooltip key={`day-${index}`}>
+                        <TooltipTrigger asChild>
+                          {dayContent}
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="bg-popover text-popover-foreground">
+                          <p className="text-sm">{holidayName}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  }
+
+                  return <div key={`day-${index}`}>{dayContent}</div>;
+                })}
+              </TooltipProvider>
             </div>
           </div>
         </>

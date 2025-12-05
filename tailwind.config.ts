@@ -63,6 +63,7 @@ export default {
         "header-bg": "hsl(var(--header-bg))",
         "today-highlight": "hsl(var(--today-highlight))",
         "weekend": "hsl(var(--weekend))",
+        "holiday": "hsl(var(--holiday))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

@@ -4,6 +4,7 @@ import { format, isSameDay, startOfDay, isWeekend } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ViewMode } from "@/types/viewMode";
 import { Period } from "@/utils/dateUtils";
+import { isHoliday } from "@/utils/holidays";
 
 interface GanttRowProps {
   vacation: VacationPeriod;
@@ -42,15 +43,24 @@ export const GanttRow = ({
           const showMonthDivider = monthName !== currentMonth && viewMode === 'day';
           const isTodayColumn = isSameDay(period.date, today);
           const isWeekendDay = viewMode === 'day' && isWeekend(period.date);
+          const isHolidayDay = viewMode === 'day' && isHoliday(period.date);
           
           if (showMonthDivider) {
             currentMonth = monthName;
           }
 
+          const bgClass = isTodayColumn 
+            ? 'bg-today-highlight/10' 
+            : isHolidayDay 
+              ? 'bg-holiday' 
+              : isWeekendDay 
+                ? 'bg-weekend' 
+                : '';
+
           return (
             <div
               key={index}
-              className={`${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line ${isTodayColumn ? 'bg-today-highlight/10' : isWeekendDay ? 'bg-weekend' : ''}`}
+              className={`${showMonthDivider ? 'border-l-2 border-l-primary' : ''} border-r border-grid-line ${bgClass}`}
               style={{ width: periodWidth, minWidth: periodWidth }}
             />
           );
