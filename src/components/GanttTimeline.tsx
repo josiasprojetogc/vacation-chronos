@@ -1,4 +1,4 @@
-import { format, isSameDay, startOfDay } from "date-fns";
+import { format, isSameDay, startOfDay, isWeekend, getDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ViewMode } from "@/types/viewMode";
 import { Period } from "@/utils/dateUtils";
@@ -9,6 +9,8 @@ interface GanttTimelineProps {
   leftColumnWidth: number;
   viewMode: ViewMode;
 }
+
+const weekdayAbbr = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
 
 export const GanttTimeline = ({ periods, periodWidth, leftColumnWidth, viewMode }: GanttTimelineProps) => {
   const today = startOfDay(new Date());
@@ -154,16 +156,20 @@ export const GanttTimeline = ({ periods, periodWidth, leftColumnWidth, viewMode 
             <div className="flex">
               {periods.map((period, index) => {
                 const dayNumber = format(period.date, "d");
+                const dayOfWeek = getDay(period.date);
+                const weekday = weekdayAbbr[dayOfWeek];
                 const isTodayColumn = isSameDay(period.date, today);
+                const isWeekendDay = isWeekend(period.date);
 
                 return (
                   <div
                     key={`day-${index}`}
-                    className={`border-r border-grid-line ${isTodayColumn ? 'bg-today-highlight/10' : ''}`}
+                    className={`border-r border-grid-line ${isTodayColumn ? 'bg-today-highlight/10' : isWeekendDay ? 'bg-weekend' : ''}`}
                     style={{ width: periodWidth, minWidth: periodWidth }}
                   >
-                    <div className="text-xs text-center py-2 text-muted-foreground">
-                      {dayNumber}
+                    <div className={`text-xs text-center py-1 ${isWeekendDay ? 'text-muted-foreground/70' : 'text-muted-foreground'}`}>
+                      <div>{dayNumber}</div>
+                      <div className="text-[10px]">{weekday}</div>
                     </div>
                   </div>
                 );
