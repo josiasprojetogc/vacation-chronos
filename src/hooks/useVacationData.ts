@@ -30,11 +30,22 @@ export const useVacationData = (minDate?: Date) => {
         processedData = processedData.filter(item => item.endDate >= minDate || item.endDateReq >= minDate);
       }
       
-      // Ordenar por data de início mais próxima (menor entre oficial e solicitação)
+      // Ordenar pela primeira data visível no período atual
       processedData.sort((a, b) => {
-        const aMin = Math.min(a.startDate.getTime(), a.startDateReq.getTime());
-        const bMin = Math.min(b.startDate.getTime(), b.startDateReq.getTime());
-        return aMin - bMin;
+        const getVisibleSortTime = (item: typeof a) => {
+          const visibleStarts = [
+            item.endDate >= minDate! ? Math.max(item.startDate.getTime(), minDate!.getTime()) : null,
+            item.endDateReq >= minDate! ? Math.max(item.startDateReq.getTime(), minDate!.getTime()) : null,
+          ].filter((value): value is number => value !== null);
+
+          if (visibleStarts.length > 0) {
+            return Math.min(...visibleStarts);
+          }
+
+          return Math.min(item.startDate.getTime(), item.startDateReq.getTime());
+        };
+
+        return getVisibleSortTime(a) - getVisibleSortTime(b);
       });
       
       return detectConflicts(processedData);
